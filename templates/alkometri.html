@@ -3,6 +3,7 @@
 {% if newest %}
 <img src="{{ newest }}" width=100% height=100%">
 {% endif %}
-{% for values in scores %}
-{{ values[0] }} {{ values[1] }}</br>
+<h1> total:{{ total }} </h1>
+{% for alcoholic in scores %}
+{{ alcoholic["name"] }}:{{ alcoholic["count"] }}</br>
 {% endfor %}

@@ -10,13 +10,23 @@ drinksPath = "/var/local/ftp/alkometri"
 @app.route('/alkometri')
 def frontpage():
    alcoholics = getAlcoholics(drinksPath)
-   newestID = alcoholics[0]["last"]["by"]
-   newest =  "/static/alkometri/" + alcoholics[newestID]["name"] + "/" + alcoholics[0]["last"]["file"]
-   scores = []
-   for key, value in alcoholics.items():
-      scores.append([value['name'], value['count']])
-   scores = sorted(scores, key = itemgetter(1), reverse = True)
-   return render_template('alkometri.html', newest = newest, scores = scores)
+
+   #sort by consumption
+   scores = sorted(alcoholics, key = itemgetter('count'), reverse = True)
+
+   #count total
+   total = 0
+   for a in alcoholics:
+      total += a["count"]
+
+   #find who has the newest entry
+   newest = {"last":{"time":0}}
+   for a in alcoholics:
+      if a["last"]["time"] > newest["last"]["time"]:
+         newest = a
+   newestPic =  "/static/alkometri/" + newest["name"] + "/" + newest["last"]["file"]
+
+   return render_template('alkometri.html', total = total, newest = newestPic, scores = scores)
 
 @app.route('/alkometri/api')
 def api():
