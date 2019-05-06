@@ -1,15 +1,17 @@
 #!/bin/bash
 
-clear
 echo watching $1
 
 for (( ;; ))
 do
    #wait for new file
-   filepath=$(inotifywait -qr -e close --format %w%f $1)
+   filepath=$(inotifywait -qr -e create --format %w%f $1)
    echo $filepath
    file=$(echo $filepath | awk -F/ '{print $NF}')
    name=$(echo $filepath | awk -F/ '{print $(NF - 1)}')
+
+   #wait for upload to complete
+   inotifywait -q -e close $filepath
    echo $name uploaded $file
 
    #try to resize if filesize too large
