@@ -11,8 +11,8 @@ drinksPath = "/var/local/ftp/alkometri"
 def frontpage():
    alcoholics = getAlcoholics(drinksPath)
 
-   #sort by consumption
-   scores = sorted(alcoholics, key = itemgetter('count'), reverse = True)
+   #sort by newest
+   scores = sorted(alcoholics, key = lambda x: x['last']['time'], reverse = True)
 
    #count total
    total = 0
